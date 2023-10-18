@@ -28,7 +28,7 @@ public class FrutaService {
         if (maybeFruta.isPresent()) {
             return maybeFruta.get();
         } else {
-            throw new ResourceNotFoundException("Fruta with ID " + id + " not found"); // ResourceNotFoundException - это пользовательское исключение, которое вы должны создать
+            throw new ResourceNotFoundException("Fruta with ID " + id + " not found"); 
         }
     }
 
