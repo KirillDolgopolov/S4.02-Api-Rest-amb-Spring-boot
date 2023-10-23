@@ -4,6 +4,8 @@ import cat.itacademy.barcelonactiva.dolgopolov.kirill.s04.t02.n03.models.FrutaMo
 import cat.itacademy.barcelonactiva.dolgopolov.kirill.s04.t02.n03.services.FrutaService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -16,35 +18,39 @@ public class FrutaController {
     FrutaService frutaService;
 
     @GetMapping(value = "/frutas", produces = "application/json")
-    public ArrayList<FrutaModel> getFrutas() {
-        return this.frutaService.getFrutas();
+    public ResponseEntity<ArrayList<FrutaModel>> getFrutas() {
+        ArrayList<FrutaModel> frutaList = new ArrayList<>(frutaService.getFrutas());
+        return new ResponseEntity<>(frutaList, HttpStatus.OK);
     }
 
     @PostMapping(value = "/fruta")
-    public FrutaModel saveFruta(@RequestBody FrutaModel fruta) {
-        return this.frutaService.saveFruta(fruta);
+    public ResponseEntity<FrutaModel> saveFruta(@RequestBody FrutaModel fruta) {
+        frutaService.saveFruta(fruta);
+        return new ResponseEntity<>(fruta, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
-    public Optional<FrutaModel> getFrutaById(@PathVariable("id") String idString) {
+    public ResponseEntity<Optional<FrutaModel>> getFrutaById(@PathVariable("id") String idString) {
         ObjectId id = new ObjectId(idString);
-        return this.frutaService.getById(id);
+        Optional<FrutaModel> mayBeFruta = frutaService.getById(id);
+        return new ResponseEntity<>(mayBeFruta, HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}")
-    public FrutaModel updateFrutaById(@RequestBody FrutaModel request, @PathVariable("id") String idString) {
+    public ResponseEntity<FrutaModel> updateFrutaById(@RequestBody FrutaModel request, @PathVariable("id") String idString) {
         ObjectId id = new ObjectId(idString);
-        return this.frutaService.updateById(request, id);
+        frutaService.updateById(request, id);
+        return new ResponseEntity<>(request, HttpStatus.OK);
     }
 
 
     @DeleteMapping(value = "/{id}")
-    public String deliteFrutaById(@PathVariable("id") String idString) {
+    public ResponseEntity<String> deliteFrutaById(@PathVariable("id") String idString) {
         ObjectId id = new ObjectId(idString);
         boolean ok = this.frutaService.deleteFruta(id);
         if (ok) {
-            return "La fruta con ID " + idString + " se ha eliminado";
-        } else return "Error";
+            return new ResponseEntity<>("La fruta con ID " + idString + " se ha eliminado", HttpStatus.OK);
+        } else return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 

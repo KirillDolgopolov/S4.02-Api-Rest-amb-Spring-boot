@@ -5,7 +5,6 @@ import cat.itacademy.barcelonactiva.dolgopolov.kirill.s04.t02.n01.models.FrutaMo
 import cat.itacademy.barcelonactiva.dolgopolov.kirill.s04.t02.n01.repository.IFrutaRepository;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,8 +27,7 @@ public class FrutaService {
         if (maybeFruta.isPresent()) {
             return maybeFruta.get();
         } else {
-            throw new ResourceNotFoundException("Fruta with ID " + id + " not found"); 
-        }
+            throw new ResourceNotFoundException("Fruta with ID " + id + " not found"); }
     }
 
 
